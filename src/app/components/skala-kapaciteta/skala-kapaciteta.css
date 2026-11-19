@@ -1,0 +1,23 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skala {
+  width: 200px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: #e0e0e0;
+  overflow: hidden;
+}
+
+.popuna {
+  height: 100%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.opis {
+  color: #37474f;
+  font-size: 13px;
+}

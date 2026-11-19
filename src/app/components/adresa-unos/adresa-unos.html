@@ -1,0 +1,9 @@
+<fieldset>
+  <legend>Adresa</legend>
+
+  <label for="ulica">Ulica i broj</label>
+  <input id="ulica" type="text" [value]="ulica()" (input)="promeniUlicu($event)" />
+
+  <label for="mesto">Mesto</label>
+  <input id="mesto" type="text" [value]="mesto()" (input)="promeniMesto($event)" />
+</fieldset>

@@ -1,0 +1,30 @@
+Šta Angular radi:
+1. providedIn: 'root' — servis se registruje u korenskom injektoru.
+  Instanca se pravi lenjo, pri prvom inject(MagacinServis), i posle toga svi dobijaju istu instancu (singleton).
+    -| sta nam znaci to sto svi dobijaju istu instancu? ako dobijemo drugu instancu servisa sa istim metodama koji problemi nastaju? |-
+  Zato servis može da čuva deljeno stanje — to koristimo za boje skale na kraju ovog koraka.
+    -| objasni mi mehanizam koriscen za boje skale |-
+2. inject(X) pita injektor za instancu.
+  Radi dok Angular pravi objekat (u inicijalizaciji polja ili u konstruktoru) i u funkcijama koje Angular poziva „u kontekstu injekcije" (guard i interceptor na K2).
+    -| lociraj mi taj momenat pri izvrsavanju, gde se nalazi u celom lancu pokretanja aplikacije? nacrtaj mi ceo lanac |-
+  Pozvan kasnije, na primer u metodi koja se izvršava na klik, baca grešku `NG0203`.
+    -| zasto? |-
+3. Komponenta ne pravi servis sa new. Ne zna odakle podaci dolaze, pa se servis može zameniti (npr. lažnim u testu) bez diranja komponente.
+
+inject(HttpClient) i constructor(private http: HttpClient) rade isto;
+
+
+`HttpClient` vraća `Observable`
+    -| da li je to razlog zasto angular radi sa observablima ili je obrnuto koriste se jer angular zahteva takav mehanizam |-
+
+HTTP zahtev traje (mreža, server). JavaScript ima jednu nit i ne sme da stoji i čeka, jer bi se zamrznuo ceo pregledač.
+Zato http.get() ne vraća podatke, već `Observable` — objekat koji opisuje „zahtev koji će jednom dati odgovor".
+    -| koje su slicnosti sa observable i Promisse? |-
+
+- Lenj je: getMagacini() samo napravi opis zahteva. Zahtev polazi tek na `subscribe`.
+    -| dakle get magacini napravi kako zahtev treba da izgleda i taj template postoji dok neko ne uradi .subscribe na njega, zatim se salje zahtev i gde se smesta odgovor, tamo gde je uradjen .subscribe ili negde drugde? |-
+- Svaki `subscribe` je nov zahtev. Dva `subscribe` na isti `Observable` pošalju dva zahteva.
+- subscribe prima funkciju (ili objekat `{ next, error }`) koju Angular poziva kasnije, kad odgovor stigne. Kod ispod `subscribe` se izvršava odmah, pre odgovora — isto kao `setTimeout` primer.
+- HTTP odgovor stiže kao macrotask: pregledač ga stavi u red, a event loop ga izvrši kad se isprazni stek poziva.
+    -| pokusaj da mi ilistrujes ovaj mehanizam |-
+- HTTP greška (404, ugašen server sa statusom `0`) ne baca izuzetak, nego poziva `error` granu.

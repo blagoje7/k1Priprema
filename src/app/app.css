@@ -1,0 +1,25 @@
+.zaglavlje {
+  padding: 10px 20px;
+  border-bottom: 1px solid #b0bec5;
+}
+
+.meni {
+  display: flex;
+  gap: 15px;
+}
+
+.meni a {
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: #37474f;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.meni a.aktivan {
+  background-color: #e0f2f1;
+}
+
+.sadrzaj {
+  padding: 20px;
+}

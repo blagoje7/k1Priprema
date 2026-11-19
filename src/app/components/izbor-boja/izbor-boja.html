@@ -1,0 +1,12 @@
+<fieldset>
+  <legend>Boje skale</legend>
+
+  @for (n of nivoi; track n.nivo) {
+    <label class="red">
+      {{ n.opis }}
+      <input type="color" [value]="bojeServis.boje()[n.nivo]" (input)="promeni(n.nivo, $event)" />
+    </label>
+  }
+
+  <button type="button" (click)="bojeServis.vratiPodrazumevane()">Podrazumevane boje</button>
+</fieldset>

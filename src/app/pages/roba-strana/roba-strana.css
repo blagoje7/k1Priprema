@@ -1,0 +1,19 @@
+
+.raspored {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dugmad {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}

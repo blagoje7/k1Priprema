@@ -1,0 +1,83 @@
+<h2>Roba</h2>
+
+@if (poruka()) {
+  <p class="poruka">{{ poruka() }}</p>
+}
+@if (greska()) {
+  <p class="greska">{{ greska() }}</p>
+}
+
+<div class="raspored">
+  <form [formGroup]="forma" (ngSubmit)="sacuvaj()">
+    <h3>{{ jeIzmena() ? 'Izmena robe' : 'Nova roba' }}</h3>
+
+    <label for="magacin">Magacin</label>
+    <select id="magacin" formControlName="magacin_id">
+      <option [ngValue]="null" disabled>izaberi magacin</option>
+      @for (m of magacini(); track m.id) {
+        <option [ngValue]="m.id">{{ m.naziv }}</option>
+      }
+    </select>
+    @if (forma.controls.magacin_id.invalid && forma.controls.magacin_id.touched) {
+      <small class="greska">Magacin je obavezan.</small>
+    }
+
+    <label for="naziv">Naziv</label>
+    <input id="naziv" type="text" formControlName="naziv" />
+    @if (forma.controls.naziv.invalid && forma.controls.naziv.touched) {
+      <small class="greska">Naziv je obavezan.</small>
+    }
+
+    <label for="opis">Opis</label>
+    <input id="opis" type="text" formControlName="opis" />
+
+    <label for="cena">Cena</label>
+    <input id="cena" type="number" step="0.01" formControlName="cena" />
+    @if (forma.controls.cena.invalid && forma.controls.cena.touched) {
+      <small class="greska">Cena je obavezna i ne sme biti negativna.</small>
+    }
+
+    <label for="kolicina">Kolicina</label>
+    <input id="kolicina" type="number" step="0.01" formControlName="kolicina" />
+    @if (forma.controls.kolicina.invalid && forma.controls.kolicina.touched) {
+      <small class="greska">Kolicina je obavezna i ne sme biti negativna.</small>
+    }
+
+    <label for="jedinica">Jedinica</label>
+    <select id="jedinica" formControlName="jedinica">
+      <option value="Kg">Kg</option>
+      <option value="L">L</option>
+      <option value="Kom">Kom</option>
+    </select>
+
+    <div class="dugmad">
+      <button type="submit">{{ jeIzmena() ? 'Sacuvaj izmene' : 'Dodaj robu' }}</button>
+      @if (jeIzmena()) {
+        <button type="button" (click)="odustani()">Odustani</button>
+      }
+    </div>
+  </form>
+
+  <section class="filter">
+    <label for="filter">Prikazi robu magacina</label>
+    <select id="filter" (change)="promeniFilter($event)">
+      <option value="" [selected]="filterMagacinId() === null">svi magacini</option>
+      @for (m of magacini(); track m.id) {
+        <option [value]="m.id" [selected]="m.id === filterMagacinId()">{{ m.naziv }}</option>
+      }
+    </select>
+
+    @if (izabraniMagacin(); as magacin) {
+      <p>Popunjenost: {{ magacin.naziv }}</p>
+      <!-- ZAHTEV 3: ista skala kao u tabeli magacina, iste boje iz servisa -->
+      <app-skala-kapaciteta [zauzeto]="zauzetoIzabranog()" [kapacitet]="magacin.kapacitet"></app-skala-kapaciteta>
+    }
+  </section>
+</div>
+
+<app-tabela-roba
+  [roba]="prikazanaRoba()"
+  [magacini]="magacini()"
+  (izmeni)="izmeni($event)"
+  (obrisi)="obrisi($event)"
+></app-tabela-roba>

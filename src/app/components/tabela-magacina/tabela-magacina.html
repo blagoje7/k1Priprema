@@ -1,0 +1,35 @@
+<table>
+  <thead>
+    <tr>
+      <th>Naziv</th>
+      <th>Adresa</th>
+      <th>Kapacitet</th>
+      <th>Popunjenost</th>
+      <th>Akcije</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (m of magacini(); track m.id) {
+      <tr>
+        <td>{{ m.naziv }}</td>
+        <td>{{ m.adresa }}</td>
+        <td>{{ m.kapacitet }}</td>
+        <td>
+          <!-- ZAHTEV 3: skala popunjenosti -->
+          <app-skala-kapaciteta [zauzeto]="zauzeto(m)" [kapacitet]="m.kapacitet"></app-skala-kapaciteta>
+        </td>
+        <td>
+          <div class="akcije">
+            <a [routerLink]="['/roba']" [queryParams]="{ magacin: m.id }">Roba</a>
+            <button type="button" (click)="izmeni.emit(m)">Izmeni</button>
+            <button type="button" (click)="obrisi.emit(m)">Obrisi</button>
+          </div>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="5">Nema magacina.</td>
+      </tr>
+    }
+  </tbody>
+</table>

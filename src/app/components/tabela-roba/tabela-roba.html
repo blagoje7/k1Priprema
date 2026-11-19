@@ -1,0 +1,35 @@
+<table>
+  <thead>
+    <tr>
+      <th>Naziv</th>
+      <th>Opis</th>
+      <th>Cena</th>
+      <th>Kolicina</th>
+      <th>Jedinica</th>
+      <th>Magacin</th>
+      <th>Akcije</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (r of roba(); track r.id) {
+      <tr>
+        <td>{{ r.naziv }}</td>
+        <td>{{ r.opis }}</td>
+        <td>{{ r.cena | number: '1.2-2' }}</td>
+        <td>{{ r.kolicina | number: '1.0-2' }}</td>
+        <td>{{ r.jedinica }}</td>
+        <td>{{ nazivMagacina(r.magacin_id) }}</td>
+        <td>
+          <div class="akcije">
+            <button type="button" (click)="izmeni.emit(r)">Izmeni</button>
+            <button type="button" (click)="obrisi.emit(r)">Obrisi</button>
+          </div>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="7">Nema robe.</td>
+      </tr>
+    }
+  </tbody>
+</table>

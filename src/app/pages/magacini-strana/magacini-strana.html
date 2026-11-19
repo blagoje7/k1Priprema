@@ -1,0 +1,48 @@
+<h2>Magacini</h2>
+
+@if (poruka()) {
+  <p class="poruka">{{ poruka() }}</p>
+}
+
+@if (greska()) {
+  <p class="greska">{{ greska() }}</p>
+}
+
+<div>
+  <form [formGroup]="forma" (ngSubmit)="sacuvaj()">
+    <h3>{{ jeIzmena() ? 'Izmena magacina' : 'Novi magacin' }}</h3>
+
+    <label for="naziv">Naziv</label>
+    <input id="naziv" type="text" formControlName="naziv" />
+    @if (forma.controls.naziv.invalid && forma.controls.naziv.touched) {
+      <small class="gresa">Naziv je obavezan.</small>
+    }
+
+    <label for="kapacitet">Kapacitet</label>
+    <input id="kapacitet" type="number" formControlName="kapacitet" />
+    @if (forma.controls.kapacitet.invalid && form.controls.kapacitet.touched) {
+      <small class="greska">Kapacitet mora biti veci od 0.</small>
+    }
+
+    <app-adresa-unos [adresa]="adresaZaUnos()" (promena)="postaviAdresu($event)"></app-adresa-unos>
+    @if (forma.controls.adresa.invalid && forma.controls.adresa.touched) {
+      <small class="greska">Unesite ulicu i mesto.</small>
+    }
+
+    <div class="dugmad">
+      <button type="submit">{{ jeIzmena() ? 'Sacuvaj izmene' : 'Dodaj magacin' }}</button>
+      @if (jeIzmena()) {
+        <button type="button" (click)="odustani()">Odustani</button>
+      }
+    </div>
+  </form>
+
+  <app-izbor-boja></app-izbor-boja>
+</div>
+
+<app-tabela-magacina
+  [magacini]="magacini()"
+  [roba]="roba()"
+  (izmeni)="izmeni($event)"
+  (obrisi)="obrisi($event)"
+></app-tabela-magacina>
